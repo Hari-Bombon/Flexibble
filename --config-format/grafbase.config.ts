@@ -15,4 +15,4 @@ const grafbaseConfig = config({
 });
 
 // Export the configured Grafbase instance
-export default grafbaseConfig;
+export default grafbaseConfig
