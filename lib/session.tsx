@@ -1,61 +1,85 @@
-
+import { getServerSession } from "next-auth/next";
 import { NextAuthOptions, User } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
-import { JWT } from 'next-auth/jwt';
-import GoogleProvider from 'next-auth/providers/google';
-import { getServerSession } from "next-auth";
-import { SessionInterface } from "@/common.types";
+import GoogleProvider from "next-auth/providers/google";
+import jsonwebtoken from 'jsonwebtoken'
+import { JWT } from "next-auth/jwt";
 
-// Export the authentication options
+import { createUser, getUser } from "./action";
+import { SessionInterface, UserProfile } from "@/common.types";
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    })
+    }),
   ],
   jwt: {
-    // encode: ({ secret, token }) => {
-    //   // Encode logic
-    // },
-    // decode: async ({ secret, token }) => {
-    //   // Decode logic
-    // }
+    encode: ({ secret, token }) => {
+      const encodedToken = jsonwebtoken.sign(
+        {
+          ...token,
+          iss: "grafbase",
+          exp: Math.floor(Date.now() / 1000) + 60 * 60,
+        },
+        secret
+      );
+      
+      return encodedToken;
+    },
+    decode: async ({ secret, token }) => {
+      const decodedToken = jsonwebtoken.verify(token!, secret);
+      return decodedToken as JWT;
+    },
   },
   theme: {
-    colorScheme: 'light',
-    logo: '/logo.png'
+    colorScheme: "light",
+    logo: "/logo.svg",
   },
   callbacks: {
     async session({ session }) {
-      return session;
+      const email = session?.user?.email as string;
+      try { 
+        const data = await getUser(email) as { user?: UserProfile }
+        const newSession = {
+          ...session,
+          user: {
+            ...session.user,
+            ...data?.user,
+          },
+        };
+
+        return newSession;
+      } catch (error: any) {
+        console.error("Error retrieving user data: ", error.message);
+        return session;
+      }
     },
-    async signIn({ user }: { user: AdapterUser | User }) {
+    async signIn({ user }: {
+      user: AdapterUser | User
+    }) {
       try {
-        // Get the user if they exist
+        const userExists = await getUser(user?.email as string) as { user?: UserProfile }
+        
+        if (!userExists.user) {
+          await createUser(
+            user.name as string,
+            user.email as string,
+            user.image as string
+          );
+        }
 
-        // If they don't exist, create them
-
-        // Return true
-      } catch (error) {
-        console.error(error);
+        return true;
+      } catch (error: any) {
+        console.log("Error checking if user exists: ", error.message);
         return false;
       }
-    }
-  }
+    },
+  },
 };
 
-// Export an asynchronous function to get the current user session
-export async function getCurrentUser(): Promise<SessionInterface | null> {
-  try {
-    // Fetch the session using getServerSession
-    const session = await getServerSession({ req: null, res: null }, authOptions);
+export async function getCurrentUser() {
 
-    // Return the session
-    return session as SessionInterface | null;
-  } catch (error) {
-    // Handle errors or log them
-    console.error("Error fetching session:", error);
-    return null;
-  }
+ 
 }

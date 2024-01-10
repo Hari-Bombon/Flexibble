@@ -14,7 +14,7 @@ type Provider = {
 type ProviderList = Record<string, Provider>;
 
 const AuthProviders = () => {
-  const [providers, setProviders] = useState<ProviderList | null>(null);
+  const [providers, setProviders] = useState<ProviderList | null>();
  
   useEffect(() => {
     const fetchProviders = async () => {
@@ -22,7 +22,7 @@ const AuthProviders = () => {
         const result = await getProviders();
         console.log(result);
   
-        setProviders(result);
+     
       } catch (error) {
         console.error("Error fetching providers:", error);
       }
