@@ -1,5 +1,4 @@
 import { graph, auth, config } from '@grafbase/sdk';
-import { url } from 'inspector';
 
 // Assuming there's a separate URL type definition or method
 const UrlType = graph.url();
@@ -20,10 +19,10 @@ const Project = graph.model('Project', {
   title: graph.string().length({ min: 3 }),
   description: graph.string(),
   image: UrlType,
-  githubUrl: url.string(),
+  githubUrl: UrlType.optional(),
   category: graph.string().search(),
   createdBy: graph.relation(() => User),
 });
 
-// Export the User model and the Grafbase configuration
-export default config;
+// Export the User model, Project model, and the Grafbase configuration
+export { User, Project, config };

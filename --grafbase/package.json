@@ -7,7 +7,7 @@
   "keywords": [],
   "license": "ISC",
   "main": "index.js",
-  "name": "--config-format",
+  "name": "--grafbase",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

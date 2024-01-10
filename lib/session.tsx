@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
 export async function getCurrentUser(): Promise<SessionInterface | null> {
   try {
     // Fetch the session using getServerSession
-    const session = await getServerSession( authOptions);
+    const session = await getServerSession({ req: null, res: null }, authOptions);
 
     // Return the session
     return session as SessionInterface | null;
@@ -58,5 +58,4 @@ export async function getCurrentUser(): Promise<SessionInterface | null> {
     console.error("Error fetching session:", error);
     return null;
   }
-
 }
