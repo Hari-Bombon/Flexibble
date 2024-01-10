@@ -18,11 +18,13 @@ const User = graph.model('User', {
 const Project = graph.model('Project', {
   title: graph.string().length({ min: 3 }),
   description: graph.string(),
-  image: UrlType,
+  image:graph.url(),
   githubUrl: UrlType.optional(),
   category: graph.string().search(),
   createdBy: graph.relation(() => User),
 });
 
 // Export the User model, Project model, and the Grafbase configuration
-export { User, Project, config };
+export default config({
+  schema: graph
+})
