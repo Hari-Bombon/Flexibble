@@ -7,31 +7,27 @@ import { useEffect, useState } from 'react';
 import { getCurrentUser } from '@/lib/session';
 import { SessionInterface } from '@/common.types';
 
-// Navbar component
 export const Navbar = () => {
-  // State to store user session
+ 
   const [session, setSession] = useState<SessionInterface | null>(null);
 
-  // Effect to fetch user session on component mount
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const userSession = await getCurrentUser();
-        return session;
-      } catch (error) {
-        console.error('Error fetching session:', error);
-        // Handle errors if necessary
-      }
-    };
+useEffect(() => {
+  const fetchSession = async () => {
+    try {
+      const userSession = await getCurrentUser();
+      return userSession;
+    } catch (error) {
+      console.error('Error fetching session:', error);
+      // Handle errors if necessary
+    }
+  };
 
-    fetchSession();
-  }, []);
-
+  fetchSession().then(userSession => setSession(userSession));
+}, []);
   // Return the JSX for the Navbar component
   return (
     <nav className='flexBetween navbar'>
       <div className='flex-1 flexStart gap-10'>
-        {/* Logo */}
         <Link href='/'>
           <Image
             src='/public/logo.svg'
