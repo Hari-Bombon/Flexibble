@@ -45,7 +45,7 @@ export interface UserProfile {
 }
 
 export interface SessionInterface extends Session {
-  user: User & {
+    user: User & {
     id: string;
     name: string;
     email: string;

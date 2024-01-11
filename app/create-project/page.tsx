@@ -1,25 +1,21 @@
-"use client"
-import Modal from "@/components/Modal"
-import { useRouter } from "next/router"
-import ProjectForm from "@/components/ProjectForm"
-import { getCurrentUser } from "@/lib/session"
+import { redirect } from "next/navigation";
 
-const CreateProject = () => {
-  const router = useRouter()
-  const session = getCurrentUser()
+import { getCurrentUser } from "@/lib/session";
+import Modal from "@/components/Modal";
+import ProjectForm from "@/components/ProjectForm";
 
-  if (!session?.user) {
-    router.push('/')
-    return null
-  }
+const CreateProject = async () => {
+  const session = await getCurrentUser();
+
+  if (!session?.user) redirect("/")
 
   return (
     <Modal>
-      <h3 className="modal-head-text"> Create A New Project </h3>
+      <h3 className="modal-head-text">Create a New Project</h3>
 
       <ProjectForm type="create" session={session} />
     </Modal>
-  )
-}
+  );
+};
 
-export default CreateProject
+export default CreateProject;
