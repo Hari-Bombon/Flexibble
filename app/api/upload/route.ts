@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary"
 
 cloudinary.config({
-    cloud_name:'dl6uupkqn',
-    api_key:'838664717713152',
-    api_secret:'DDC8864UMb6wQfHArGmo75ymrys',
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_API_SECRET,
 });
 export async function POST(request: Request){
     const {path} = await request.json();
@@ -22,7 +22,10 @@ export async function POST(request: Request){
             overwrite: true,
             transformation:[{width:1000 , height:752,  crop:'scale'}]
         }
-    } catch(error){
+        const result = await cloudinary.uploader.upload(path,options);
 
+        return NextResponse.json(result,{ status:200})
+    } catch(error){
+        return NextResponse.json({ message:error},{ status:500})
     }
 }
