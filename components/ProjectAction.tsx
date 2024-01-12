@@ -1,3 +1,4 @@
+"use Client"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -30,8 +31,8 @@ const ProjectAction = ({ projectId}: {projectId : string}) => {
         <Link href={`/edit-project/${projectId}`} className="flexCenter edit-action_btn">
             <Image src="/pencile.svg" width={15} height={15} alt="edit"/>
         </Link>
-        <button type="button" className={`flexCenter delete-action_btn`}>
-            <Image src='/pencile.svg' width={15} height={15} alt="edit"/>
+        <button type="button" className={`flexCenter delete-action_btn ${isDeleting ? 'bg-gray' : 'primary-primary-purple'}`}>
+            <Image src='/trash.svg' width={15} height={15} alt="delete"/>
         </button>
     </>
   )
