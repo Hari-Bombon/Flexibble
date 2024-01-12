@@ -2,6 +2,7 @@
 // Import necessary libraries and types
 import { useState, useEffect } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
+import Button from './Button';
 
 // Define types for Provider and ProviderList
 type Provider = {
@@ -29,8 +30,6 @@ const AuthProviders = () => {
         
         // Log the result for debugging
         console.log(result);
-
-        // Set the fetched providers to the state
         setProviders(result as ProviderList);
       } catch (error) {
         // Log any errors that occur during fetching
@@ -48,17 +47,17 @@ const AuthProviders = () => {
       <div>
         {/* Map over providers and render a button for each */}
         {Object.values(providers).map((provider: Provider, i) => (
-          <button key={i} onClick={() => signIn(provider?.id)}>
-            {provider.id}
-          </button>
+         <Button
+            key={i}
+            title="Sign In"
+            handleClick={() => signIn(provider?.id)}
+          />
         ))}
       </div>
     );
   }
 
-  // If providers are not yet fetched, you can render a loading state or return null
   return null;
 };
 
-// Export the AuthProviders component
 export default AuthProviders;

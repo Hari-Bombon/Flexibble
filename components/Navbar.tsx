@@ -37,7 +37,6 @@ useEffect(() => {
           />
         </Link>
       </div>
-      {/* Navigation links */}
       <ul className='xl:flex hidden text-small gap-7'>
         {NavLinks.map((link) => (
           <li key={link.key}>
@@ -45,13 +44,10 @@ useEffect(() => {
           </li>
         ))}
       </ul>
-      {/* User actions */}
       <div className='flexCenter gap-4'>
         {session?.user ? (
-          // If user is logged in
           <>
             {session?.user?.image && (
-              // Display user image if available
               <Image
                 src={session.user.image}
                 width={40}
@@ -60,13 +56,11 @@ useEffect(() => {
                 alt={session.user.name}
               />
             )}
-            {/* Button to create a new project */}
             <Link href='/create-project'>
               <button title='Share Work'>Share Work</button>
             </Link>
           </>
         ) : (
-          // If user is not logged in, display authentication providers
           <AuthProviders />
         )}
       </div>
@@ -74,5 +68,4 @@ useEffect(() => {
   );
 };
 
-// Export the Navbar component
 export default Navbar;
