@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/Navbar'
 import Footer from '@/components/Footer';
-import './api/globals.css'
+import './globals.css'
 
 export const metadata = {
   title: 'Flexibble',

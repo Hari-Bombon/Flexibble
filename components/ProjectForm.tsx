@@ -20,7 +20,7 @@ type Props = {
 const ProjectForm = ({ type, session, project }: Props) => {
     const router = useRouter()
 
-    const [submitting, setSubmitting] = useState<boolean>(false);
+    const [submitting, setSubmitting] = useState(false);
     const [form, setForm] = useState<FormState>({
         title: project?.title || "",
         description: project?.description || "",
@@ -68,13 +68,11 @@ const ProjectForm = ({ type, session, project }: Props) => {
         try {
             if (type === "create") {
                 await createNewProject(form, session?.user?.id, token)
-
                 router.push("/")
             }
             
             if (type === "edit") {
                 await updateProject(form, project?.id as string, token)
-
                 router.push("/")
             }
 
